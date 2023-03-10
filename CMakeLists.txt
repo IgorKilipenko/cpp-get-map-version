@@ -7,7 +7,7 @@ set(SRC_DIR ./src)
 set(MAIN_FILE ${SRC_DIR}/main.cpp )
 #set(PROJECT_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/local")
 
-#include(./libs/cpp-httplib/CMakeLists.txt)
+
 
 find_package(OpenSSL REQUIRED)
 if(OPENSSL_FOUND)
@@ -28,8 +28,9 @@ ExternalProject_Add(httplib
     STEP_TARGETS build
 )
 #set(cpp-httplib_BINARY_DIR "${CMAKE_BINARY_DIR}/libs/src/fmtlib-build")
-set(httplib_SOURCE_DIR "${CMAKE_BINARY_DIR}/libs/src/cpp-httplib")
+#set(httplib_SOURCE_DIR "${CMAKE_BINARY_DIR}/libs/src/cpp-httplib")
 
+ExternalProject_Get_Property(httplib SOURCE_DIR)
 
 set(LIBS 
     ${MAIN_FILE}
