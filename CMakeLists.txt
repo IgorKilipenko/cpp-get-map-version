@@ -5,10 +5,9 @@ project(${PROJECT_NAME} CXX)
 
 set(SRC_DIR ./src)
 set(MAIN_FILE ${SRC_DIR}/main.cpp )
-#set(PROJECT_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/local")
 
 
-
+# ADD AND CONFIG httplib
 find_package(OpenSSL REQUIRED)
 if(OPENSSL_FOUND)
     set(HTTPLIB_IS_USING_OPENSSL TRUE)
@@ -19,16 +18,11 @@ ExternalProject_Add(httplib
     PREFIX libs
     GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
     EXCLUDE_FROM_ALL TRUE
-    #BUILD_COMMAND $(MAKE) fmt
     DOWNLOAD_DIR ${CMAKE_CURRENT_SOURCE_DIR}
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs
     CMAKE_ARGS -DHTTPLIB_REQUIRE_OPENSSL=on -DBUILD_SHARED_LIBS=on
-    #INSTALL_DIR ${CMAKE_BINARY_DIR}/libs
-    #DEPENDS libssl libcrypto
     STEP_TARGETS build
 )
-#set(cpp-httplib_BINARY_DIR "${CMAKE_BINARY_DIR}/libs/src/fmtlib-build")
-#set(httplib_SOURCE_DIR "${CMAKE_BINARY_DIR}/libs/src/cpp-httplib")
 
 ExternalProject_Get_Property(httplib SOURCE_DIR)
 
@@ -36,7 +30,6 @@ set(LIBS
     ${MAIN_FILE}
     #${SRC_DIR}/transport_catalogue.cpp
 )
-
 set(CFLAGS -Wall -Werror -pedantic)
 set(DEFS)
 set(LINK_OPTS)

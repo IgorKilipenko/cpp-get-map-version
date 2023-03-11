@@ -3,9 +3,6 @@
 #include <string>
 #include <vector>
 
-
-
-//#include "../libs/httplib.h"
 #include "domain.h"
 
 int main() {
