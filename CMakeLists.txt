@@ -31,7 +31,7 @@ set(LIBS
     #${SRC_DIR}/transport_catalogue.cpp
 )
 set(CFLAGS -Wall -Werror -pedantic)
-set(DEFS)
+set(DEFS -DCPPHTTPLIB_OPENSSL_SUPPORT)
 set(LINK_OPTS)
 set(LDLIBS tbb pthread OpenSSL::SSL OpenSSL::Crypto)
 

@@ -1,11 +1,14 @@
 
 #pragma once
 
+#ifndef CPPHTTPLIB_OPENSSL_SUPPORT
+#define CPPHTTPLIB_OPENSSL_SUPPORT
+#endif
+
 #include <iostream>
 #include <optional>
 #include <string>
 
-#define CPPHTTPLIB_OPENSSL_SUPPORT
 #include "../libs/httplib.h"
 #include "detail/test_framework.h"
 #include "domain.h"
@@ -26,7 +29,6 @@ namespace maps {
         std::string result;
         httplib::Client cli(gmap_base_url_);
         std::optional<httplib::Result> response;
-
 
         try {
             response = cli.Get(gmap_query_);
