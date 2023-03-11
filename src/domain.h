@@ -8,22 +8,35 @@
 
 using namespace std::string_literals;
 
-class QueryBuilder {
+struct MapProviderInfo {
+    std::string base_url;
+    std::string query;
+    std::string version;
+};
+
+struct MapProviderUrls {
+    inline static const MapProviderInfo GoogleMap{
+        .base_url = "https://www.google.com"s, .query = "/maps/@38.7848036,-97.6093175,57m/data=!3m1!1e3"s, .version = ""s};
+};
+
+class QueryBuilder_ {
 public:
     std::string getRawData() const;
 
 private:
-    const std::string gmap_req_url_ = "https://www.google.com"s;
+    // Google Maps
+    inline static const std::string gmap_base_url_ = MapProviderUrls::GoogleMap.base_url;
+    inline static const std::string gmap_query_ = MapProviderUrls::GoogleMap.query;
 };
 
-inline std::string QueryBuilder::getRawData() const {
+inline std::string QueryBuilder_::getRawData() const {
     using namespace httplib;
 
-    httplib::Client cli(gmap_req_url_);
+    httplib::Client cli(gmap_base_url_);
 
     std::optional<httplib::Result> res;
     try {
-        res = cli.Get("/maps/@38.7848036,-97.6093175,57m/data=!3m1!1e3");
+        res = cli.Get(gmap_query_);
 
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
