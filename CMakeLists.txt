@@ -15,7 +15,7 @@ endif()
 
 include(ExternalProject)
 ExternalProject_Add(httplib
-    PREFIX libs
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/libs
     GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
     GIT_TAG origin/master
     #EXCLUDE_FROM_ALL TRUE
@@ -26,7 +26,9 @@ ExternalProject_Add(httplib
     INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/libs/install
 )
 
-ExternalProject_Get_Property(httplib SOURCE_DIR)
+ExternalProject_Get_Property(httplib INSTALL_DIR)
+
+#include_directories(${INSTALL_DIR}/include)
 
 set(LIBS 
     ${MAIN_FILE}
@@ -38,9 +40,10 @@ set(LINK_OPTS)
 set(LDLIBS tbb pthread OpenSSL::SSL OpenSSL::Crypto)
 
 add_executable(${PROJECT_NAME} ${LIBS})
+add_dependencies(${PROJECT_NAME} httplib)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_compile_options(${PROJECT_NAME} PRIVATE ${CFLAGS})
 target_compile_definitions(${PROJECT_NAME} PRIVATE ${DEFS})
 target_link_options(${PROJECT_NAME} PRIVATE ${LINK_OPTS})
 target_link_libraries(${PROJECT_NAME} ${LDLIBS})
-target_include_directories(${PROJECT_NAME} PUBLIC ${httplib_SOURCE_DIR})
+#target_include_directories(${PROJECT_NAME} BEFORE PUBLIC ${httplib_INSTALL_DIR})
