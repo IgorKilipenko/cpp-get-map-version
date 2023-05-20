@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(PROJECT_NAME "cpp-get-map-version")
+set(PROJECT_NAME "cpp_get_map_version")
 project(${PROJECT_NAME} CXX)
 
 set(SRC_DIR ./src)
@@ -17,11 +17,13 @@ include(ExternalProject)
 ExternalProject_Add(httplib
     PREFIX libs
     GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
-    EXCLUDE_FROM_ALL TRUE
+    GIT_TAG origin/master
+    #EXCLUDE_FROM_ALL TRUE
     DOWNLOAD_DIR ${CMAKE_CURRENT_SOURCE_DIR}
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs
-    CMAKE_ARGS -DHTTPLIB_REQUIRE_OPENSSL=on -DBUILD_SHARED_LIBS=on
+    CMAKE_ARGS -DHTTPLIB_REQUIRE_OPENSSL=on -DBUILD_SHARED_LIBS=on -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/libs/install
     STEP_TARGETS build
+    INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/libs/install
 )
 
 ExternalProject_Get_Property(httplib SOURCE_DIR)
