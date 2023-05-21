@@ -57,12 +57,10 @@ namespace maps /* Parser_ implementation */ {
     std::string_view Parser_::FindGoogleVersionInfoLine_(std::string_view text) const {
         const std::string find_prefix = "\"//khms0.google.com/kh/v"s;
         while ((text.length() > find_prefix.length()) && !text.starts_with(find_prefix)) {
-            // const size_t idx = text.find("[");
             text.remove_prefix(text.find("[") + 1);
         }
 
         if (!text.empty()) {
-            // const size_t idx = text.find("]");
             text.remove_suffix(text.size() - text.find("]"));
         }
 
