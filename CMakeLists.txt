@@ -29,8 +29,15 @@ ExternalProject_Add(httplib
 ExternalProject_Get_Property(httplib INSTALL_DIR)
 
 set(LIBS 
-    ${MAIN_FILE}
+    ${SRC_DIR}/map_version_info.h
+    ${SRC_DIR}/raw_data_loader.h
+    ${SRC_DIR}/raw_data_loader.cpp
 )
+if (NOT DEFINED BUILD_LIB)
+    list(APPEND LIBS
+        ${MAIN_FILE}
+    )
+endif()
 set(CFLAGS -Wall -Werror -pedantic)
 set(DEFS -DCPPHTTPLIB_OPENSSL_SUPPORT)
 set(LINK_OPTS)
