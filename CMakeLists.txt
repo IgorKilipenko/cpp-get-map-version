@@ -4,7 +4,7 @@ set(PROJECT_NAME "cpp_get_map_version")
 project(${PROJECT_NAME} CXX)
 
 set(IS_LIB 0)
-set(SRC_DIR ./src)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(MAIN_FILE ${SRC_DIR}/main.cpp )
 
 if (DEFINED BUILD_LIB AND BUILD_LIB)
@@ -36,25 +36,36 @@ set(LIBS
     ${SRC_DIR}/map_version_info.cpp
     ${SRC_DIR}/raw_data_loader.cpp
 )
-if (NOT IS_LIB)
-    list(APPEND LIBS
-        ${MAIN_FILE}
-    )
-endif()
+
 set(CFLAGS -Wall -Werror -pedantic)
 set(DEFS -DCPPHTTPLIB_OPENSSL_SUPPORT)
 set(LINK_OPTS)
 set(LDLIBS tbb pthread OpenSSL::SSL OpenSSL::Crypto)
 
+add_library(spreadsheetLib)
+target_sources(spreadsheetLib
+    PRIVATE
+        ${SRC_DIR}/map_version_info.cpp
+        ${SRC_DIR}/raw_data_loader.cpp
+    PUBLIC
+        ${SRC_DIR}/raw_data_loader.h
+        ${SRC_DIR}/map_version_info.h
+)
+add_dependencies(spreadsheetLib httplib)
+target_compile_features(spreadsheetLib PUBLIC cxx_std_20)
+target_compile_options(spreadsheetLib PRIVATE ${CFLAGS})
+target_compile_definitions(spreadsheetLib PRIVATE ${DEFS})
+target_link_options(spreadsheetLib PRIVATE ${LINK_OPTS})
+target_link_libraries(spreadsheetLib ${LDLIBS})
+target_include_directories(spreadsheetLib PUBLIC ${INSTALL_DIR}/include)
+
+install(FILES ${SRC_DIR}/raw_data_loader.h ${SRC_DIR}/map_version_info.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include)
+install(TARGETS spreadsheetLib
+	EXPORT spreadsheetLibTargets
+)
+
 if (NOT IS_LIB)
-    add_executable(${PROJECT_NAME} ${LIBS})
-else()
-    add_library(${PROJECT_NAME} ${LIBS})
+    add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp)
+    target_compile_features(spreadsheetLib PUBLIC cxx_std_20)
+    target_link_libraries(${PROJECT_NAME} spreadsheetLib)
 endif()
-add_dependencies(${PROJECT_NAME} httplib)
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
-target_compile_options(${PROJECT_NAME} PRIVATE ${CFLAGS})
-target_compile_definitions(${PROJECT_NAME} PRIVATE ${DEFS})
-target_link_options(${PROJECT_NAME} PRIVATE ${LINK_OPTS})
-target_link_libraries(${PROJECT_NAME} ${LDLIBS})
-target_include_directories(${PROJECT_NAME} PUBLIC ${INSTALL_DIR}/include)
