@@ -3,9 +3,13 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(PROJECT_NAME "cpp_get_map_version")
 project(${PROJECT_NAME} CXX)
 
+set(IS_LIB 0)
 set(SRC_DIR ./src)
 set(MAIN_FILE ${SRC_DIR}/main.cpp )
 
+if (DEFINED BUILD_LIB AND BUILD_LIB)
+    set(IS_LIB 1)
+endif()
 
 # ADD AND CONFIG httplib
 find_package(OpenSSL REQUIRED)
@@ -29,11 +33,10 @@ ExternalProject_Add(httplib
 ExternalProject_Get_Property(httplib INSTALL_DIR)
 
 set(LIBS 
-    ${SRC_DIR}/map_version_info.h
-    ${SRC_DIR}/raw_data_loader.h
+    ${SRC_DIR}/map_version_info.cpp
     ${SRC_DIR}/raw_data_loader.cpp
 )
-if (NOT DEFINED BUILD_LIB)
+if (NOT IS_LIB)
     list(APPEND LIBS
         ${MAIN_FILE}
     )
@@ -43,7 +46,7 @@ set(DEFS -DCPPHTTPLIB_OPENSSL_SUPPORT)
 set(LINK_OPTS)
 set(LDLIBS tbb pthread OpenSSL::SSL OpenSSL::Crypto)
 
-if (NOT DEFINED BUILD_LIB)
+if (NOT IS_LIB)
     add_executable(${PROJECT_NAME} ${LIBS})
 else()
     add_library(${PROJECT_NAME} ${LIBS})

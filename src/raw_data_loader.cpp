@@ -1,8 +1,10 @@
 
 #include "raw_data_loader.h"
 
-namespace maps {
-    inline std::string RawDataLoader::GetRawData() const {
+#include <optional>
+
+namespace maps /* RawDataLoader implementation */ {
+    std::string RawDataLoader::GetRawData() const {
         std::string result;
         httplib::Client cli(gmap_base_url_);
         std::optional<httplib::Result> response;

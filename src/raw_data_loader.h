@@ -5,12 +5,9 @@
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 #endif
 
-#include <iostream>
-#include <optional>
 #include <string>
 
 #include "httplib.h"
-#include "detail/test_framework.h"
 #include "domain.h"
 
 namespace maps {
