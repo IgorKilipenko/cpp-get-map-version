@@ -3,6 +3,8 @@
 
 #include <optional>
 
+#include "httplib.h"
+
 namespace maps /* RawDataLoader implementation */ {
     std::string RawDataLoader::GetRawData() const {
         std::string result;

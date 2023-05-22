@@ -7,7 +7,6 @@
 
 #include <string>
 
-#include "httplib.h"
 #include "domain.h"
 
 namespace maps {
