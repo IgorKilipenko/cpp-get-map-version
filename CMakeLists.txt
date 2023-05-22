@@ -59,13 +59,12 @@ target_link_options(spreadsheetLib PRIVATE ${LINK_OPTS})
 target_link_libraries(spreadsheetLib ${LDLIBS})
 target_include_directories(spreadsheetLib PUBLIC ${INSTALL_DIR}/include)
 
-install(FILES ${SRC_DIR}/raw_data_loader.h ${SRC_DIR}/map_version_info.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include)
 install(TARGETS spreadsheetLib
 	EXPORT spreadsheetLibTargets
 )
 
 if (NOT IS_LIB)
     add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp)
-    target_compile_features(spreadsheetLib PUBLIC cxx_std_20)
+    target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
     target_link_libraries(${PROJECT_NAME} spreadsheetLib)
 endif()
